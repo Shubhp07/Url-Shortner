@@ -1,5 +1,7 @@
 package com.example.Url_Shortner.controller;
 
+import java.net.URI;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,13 +18,15 @@ import jakarta.validation.Valid;
 
 @RestController
 public class UrlController {
+
     private final UrlShortenerService urlShortenerService;
 
-    public UrlController(UrlShortenerService urlShortenerService){
+    public UrlController(UrlShortenerService urlShortenerService) {
         this.urlShortenerService = urlShortenerService;
     }
+
     @PostMapping("/api/v1/url/shorten")
-    public ResponseEntity<ShortenUrlResponse> shortenUrl(@Valid @RequestBody ShortenUrlRequest request){
+    public ResponseEntity<ShortenUrlResponse> shortenUrl(@Valid @RequestBody ShortenUrlRequest request) {
         String shortCode = urlShortenerService.shortenUrl(request.url());
 
         String fullShortUrl = "http://localhost:8080/" + shortCode;
@@ -33,9 +37,11 @@ public class UrlController {
     }
 
     @GetMapping("/{shortCode}")
-    public ResponseEntity<Void> redirect(@PathVariable String shortCode){
-        return null;
-    }
+    public ResponseEntity<Void> redirect(@PathVariable String shortCode) {
+        String originalUrl = urlShortenerService.getOriginalUrlAndIncrementClicks(shortCode);
 
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(originalUrl)).build();
+
+    }
 
 }

@@ -1,7 +1,6 @@
 package com.example.Url_Shortner.service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -45,8 +44,7 @@ public class UrlShortenerService {
 
 
             UrlMapping urlMapping = urlMappingRepository.findByShortCode(shortCode).
-            orElseThrow(() -> new UrlNotFoundException("Url not found for short code"+shortCode))
-            UrlMapping urlMapping = urlMappingOptional.get();
+            orElseThrow(() -> new UrlNotFoundException("Url not found for short code"+shortCode));
             urlMapping.setClickCount(urlMapping.getClickCount() + 1);
             urlMappingRepository.save(urlMapping);
             return urlMapping.getOriginalUrl();

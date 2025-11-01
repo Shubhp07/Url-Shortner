@@ -1,0 +1,55 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Standard HTML5 metadata: specifies the character encoding. -->
+    <meta charset="UTF-8">
+    <!-- The title of our web page, which appears in the browser tab. -->
+    <title>Simple URL Shortener</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        h1, h2 { color: #333; }
+        form div { margin-bottom: 10px; }
+        input[type="text"] { width: 100%; padding: 8px; box-sizing: border-box; }
+        input[type="submit"] { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .result { margin-top: 20px; padding: 15px; background-color: #e9f7ef; border: 1px solid #b7e4c7; border-radius: 4px; }
+        .result p { margin: 5px 0; }
+        .result a { color: #0056b3; text-decoration: none; font-weight: bold; }
+        .result a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    
+    <h1>Welcome to the URL Shortener!</h1>
+
+    <form th:action="@{/shorten-web}" method="post">
+        <div>
+            <label for="longUrl">Enter a long URL to shorten:</label>
+        </div>
+        <div>
+            <input type="text" id="longUrl" name="longUrl" size="50" placeholder="https://example.com" required>
+        </div>
+        <div>
+            <input type="submit" value="Shorten URL">
+        </div>
+    </form>
+
+    <div class="result" th:if="${shortUrlResult != null}">
+        <h2>Success! Here is your short URL:</h2>
+        
+        <p>
+            Original URL: 
+            
+            <span th:text="${originalUrl}">https://example.com/original-url-goes-here</span>
+        </p>
+        
+        <p>
+            Short URL: 
+            
+            <a th:href="${shortUrlResult}" th:text="${shortUrlResult}" target="_blank">http://localhost:8080/short-url-goes-here</a>
+        </p>
+    </div>
+
+    
+
+</body>
+</html>
