@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Url_Shortner.dto.ShortenUrlRequest;
 import com.example.Url_Shortner.dto.ShortenUrlResponse;
+import com.example.Url_Shortner.dto.UrlStatsResponse;
 import com.example.Url_Shortner.service.UrlShortenerService;
 
 import jakarta.validation.Valid;
@@ -42,6 +43,11 @@ public class UrlController {
 
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(originalUrl)).build();
 
+    }
+
+    @GetMapping("/api/v1/url/stats/{shortCode}")
+    public ResponseEntity<UrlStatsResponse> getUrlStats(@PathVariable String shortCode){
+        return null;
     }
 
 }

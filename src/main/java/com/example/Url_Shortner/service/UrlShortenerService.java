@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
+import com.example.Url_Shortner.dto.UrlStatsResponse;
 import com.example.Url_Shortner.exception.UrlNotFoundException;
 import com.example.Url_Shortner.model.UrlMapping;
 import com.example.Url_Shortner.repository.UrlMappingRepository;
@@ -42,15 +43,26 @@ public class UrlShortenerService {
     @Transactional
     public String getOriginalUrlAndIncrementClicks(String shortCode) {
 
+        UrlMapping urlMapping = urlMappingRepository.findByShortCode(shortCode).
+                orElseThrow(() -> new UrlNotFoundException("Url not found for short code" + shortCode));
+        urlMapping.setClickCount(urlMapping.getClickCount() + 1);
+        urlMappingRepository.save(urlMapping);
+        return urlMapping.getOriginalUrl();
 
-            UrlMapping urlMapping = urlMappingRepository.findByShortCode(shortCode).
-            orElseThrow(() -> new UrlNotFoundException("Url not found for short code"+shortCode));
-            urlMapping.setClickCount(urlMapping.getClickCount() + 1);
-            urlMappingRepository.save(urlMapping);
-            return urlMapping.getOriginalUrl();
-        
+    }
 
-        
+    public UrlStatsResponse getStats(String shortCode){
+        UrlMapping urlMapping = urlMappingRepository.findByShortCode(shortCode)
+        .orElseThrow(()-> new UrlNotFoundException("No statistics found for short code" + shortCode));
+
+        String fullShortUrl = "http://localhost:8080/" + urlMapping.getShortCode();
+
+        return new UrlStatsResponse(
+            urlMapping.getOriginalUrl(),
+            fullShortUrl,
+            urlMapping.getCreationDate(),
+            urlMapping.getClickCount()
+        );
     }
 
     private String encodeBase62(Long number) {
