@@ -32,8 +32,12 @@ public class UrlMapping {
     @Column(unique=true)
     private String shortCode;
 
+    @Column(nullable = false)
     private LocalDateTime creationDate;
 
     private long clickCount;
+
+    private LocalDateTime expirationDate;
+
 
 }
